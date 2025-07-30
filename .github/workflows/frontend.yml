@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./book-fn   # <-- correct path here
+        working-directory: .
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./book-fn   # <-- correct path here
+        working-directory: .
     steps:
       - uses: actions/checkout@v3
       - name: Build Docker image
@@ -37,5 +37,5 @@ jobs:
         uses: render-examples/render-github-action@v1
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
-          serviceId: srv-d254hkm3jp1c73dv6e00d   # <-- replace this with your actual service ID from Render
+          serviceId: srv-d254hkm3jp1c73dv6e00d
           branch: main
