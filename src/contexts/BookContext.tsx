@@ -71,41 +71,9 @@ const initialState: SearchState = {
   booksPerPage: 8,
 };
 
-const BookContext = createContext<BookContextType | undefined>(undefined);
-
-function bookReducer(state: SearchState, action: BookAction): SearchState {
-  switch (action.type) {
-    case "SET_LOADING":
-      return { ...state, isLoading: action.payload };
-    case "SET_SEARCH_QUERY":
-      return { ...state, query: action.payload };
-    case "SET_BOOKS":
-      return {
-        ...state,
-        results: action.payload,
-        totalResults: action.payload.length,
-        currentPage: 1,
-      };
-    case "UPDATE_FILTERS":
-      return {
-        ...state,
-        filters: { ...state.filters, ...action.payload },
-        currentPage: 1,
-      };
-    case "CLEAR_FILTERS":
-      return {
-        ...state,
-        filters: initialFilters,
-        currentPage: 1,
-      };
-    case "SET_CURRENT_PAGE":
-      return { ...state, currentPage: action.payload };
-    default:
-      return state;
-  }
-}
-
-const API_URL = "http://127.0.0.1:8000/api/books/";
+// Use Vite env variable or fallback to localhost
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/books";
 
 async function fetchBooksFromApi(
   query: string,
@@ -117,7 +85,6 @@ async function fetchBooksFromApi(
   if (filters.genre && filters.genre !== "All Genres") {
     params.append("genre", filters.genre);
   }
-  // Use != null to allow 0 value for minRating and maxRating
   if (filters.minRating != null) {
     params.append("min_rating", filters.minRating.toString());
   }
@@ -126,7 +93,6 @@ async function fetchBooksFromApi(
   }
   if (filters.author) params.append("author", filters.author);
 
-  // Check yearRange properly
   if (
     filters.yearRange &&
     filters.yearRange.start != null &&
@@ -203,6 +169,38 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({
     </BookContext.Provider>
   );
 };
+
+function bookReducer(state: SearchState, action: BookAction): SearchState {
+  switch (action.type) {
+    case "SET_LOADING":
+      return { ...state, isLoading: action.payload };
+    case "SET_SEARCH_QUERY":
+      return { ...state, query: action.payload };
+    case "SET_BOOKS":
+      return {
+        ...state,
+        results: action.payload,
+        totalResults: action.payload.length,
+        currentPage: 1,
+      };
+    case "UPDATE_FILTERS":
+      return {
+        ...state,
+        filters: { ...state.filters, ...action.payload },
+        currentPage: 1,
+      };
+    case "CLEAR_FILTERS":
+      return {
+        ...state,
+        filters: initialFilters,
+        currentPage: 1,
+      };
+    case "SET_CURRENT_PAGE":
+      return { ...state, currentPage: action.payload };
+    default:
+      return state;
+  }
+}
 
 export const useBooks = () => {
   const context = useContext(BookContext);

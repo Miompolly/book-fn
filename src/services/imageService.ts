@@ -2,17 +2,22 @@ export const imageService = {
   getImageUrl(path: string): string {
     if (!path) return "";
 
-    // If the path is already a full URL, return it
+    // Base API URL from environment or fallback
+    const baseUrl =
+      import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, "") ||
+      "http://127.0.0.1:8000";
+
+    // If the path is already a full URL, return it as-is
     if (path.startsWith("http")) {
       return path;
     }
 
-    // For development environment
+    // If path starts with /media/, prepend base URL directly
     if (path.startsWith("/media/")) {
-      return `http://127.0.0.1:8000${path}`;
+      return `${baseUrl}${path}`;
     }
 
-    // For paths without /media/ prefix
-    return `http://127.0.0.1:8000/media/${path}`;
+    // Otherwise, add /media/ prefix
+    return `${baseUrl}/media/${path}`;
   },
 };

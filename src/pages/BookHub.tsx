@@ -6,11 +6,13 @@ import { BookGrid } from "../components/BookGrid";
 import { BookDetails } from "../components/BookDetails";
 import { BookProvider } from "../contexts/BookContext";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/books";
+
 const BookHubContent: React.FC = () => {
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -21,9 +23,7 @@ const BookHubContent: React.FC = () => {
 
       setLoading(true);
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8000/api/books/${selectedBookId}/`
-        );
+        const response = await fetch(`${API_URL}/${selectedBookId}/`);
         if (!response.ok) throw new Error("Failed to fetch book details");
         const data = await response.json();
         setSelectedBook(data);

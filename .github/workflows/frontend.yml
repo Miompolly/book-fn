@@ -34,4 +34,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build Docker image
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
-      # Add deploy step here for your provider (e.g., Render, Netlify, etc)
+      # Here add your deploy step
+      # Example for Render:
+      - name: Deploy to Render
+        uses: render-examples/render-github-action@v1
+        with:
+          apiKey: ${{ secrets.RENDER_API_KEY }}
+          serviceId: your-frontend-service-id
+          branch: main
