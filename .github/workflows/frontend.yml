@@ -11,35 +11,31 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./book-fn   # <-- correct path here
     steps:
       - uses: actions/checkout@v3
-
-      - name: Debug - list repo root files
-        run: ls -la
-
       - name: Install dependencies
         run: npm install
-        working-directory: ./book-fn
-
       - name: Run tests
         env:
           VITE_API_URL: https://book-hub-5.onrender.com
         run: npm test -- --watchAll=false
-        working-directory: ./book-fn
 
   build-and-deploy:
     needs: test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./book-fn   # <-- correct path here
     steps:
       - uses: actions/checkout@v3
-
       - name: Build Docker image
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
-        working-directory: ./book-fn
-
       - name: Deploy to Render
         uses: render-examples/render-github-action@v1
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
-          serviceId: srv-d254hkm3jp1c73dv6e00  # Replace this with your actual Render service ID
+          serviceId: srv-d254hkm3jp1c73dv6e00d   # <-- replace this with your actual service ID from Render
           branch: main
