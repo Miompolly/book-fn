@@ -42,9 +42,10 @@ jobs:
       - name: Build Docker image
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
 
+      - name: Install Render CLI
+        run: npm install -g @render/cli
+
       - name: Deploy to Render
-        uses: renderinc/render-action@v1
-        with:
-          apiKey: ${{ secrets.RENDER_API_KEY }}
-          serviceId: srv-d254hkm3jp1c73dv6e00d  # ✅ Replace with your actual Render Service ID
-          branch: main
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: render deploy service --service-id srv-d254hkm3jp1c73dv6e00d --wait
