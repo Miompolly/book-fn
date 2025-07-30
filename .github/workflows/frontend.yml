@@ -2,11 +2,11 @@ name: React Frontend CI/CD
 
 on:
   push:
-    paths:
-      - 'book-fn/**'
+    branches:
+      - main
   pull_request:
-    paths:
-      - 'book-fn/**'
+    branches:
+      - main
 
 jobs:
   test:
@@ -26,7 +26,6 @@ jobs:
   build-and-deploy:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     defaults:
       run:
         working-directory: book-fn
@@ -34,8 +33,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build Docker image
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
-      # Here add your deploy step
-      # Example for Render:
       - name: Deploy to Render
         uses: render-examples/render-github-action@v1
         with:
