@@ -1,6 +1,6 @@
 import { Book } from "../types/book";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+const API_URL = "https://book-hub-5.onrender.com/api";
 
 export const bookService = {
   async getAllBooks(): Promise<Book[]> {
