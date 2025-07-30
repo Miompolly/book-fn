@@ -16,8 +16,13 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v3
+
       - name: Install dependencies
         run: npm install
+
+      - name: Install Jest (for testing)
+        run: npm install --save-dev jest
+
       - name: Run tests
         env:
           VITE_API_URL: https://book-hub-5.onrender.com
@@ -31,11 +36,13 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v3
+
       - name: Build Docker image
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
+
       - name: Deploy to Render
         uses: render-examples/render-github-action@v1
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
-          serviceId: srv-d254hkm3jp1c73dv6e00d
+          serviceId: srv-d254hkm3jp1c73dv6e00d  # ✅ Your actual service ID
           branch: main
