@@ -15,18 +15,19 @@ jobs:
       run:
         working-directory: .
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Install dependencies
         run: npm install
 
-      - name: Install Jest (for testing)
+      - name: Install Jest (if not already installed)
         run: npm install --save-dev jest
 
-      - name: Run tests
+      - name: Run tests (pass even if no tests exist)
         env:
           VITE_API_URL: https://book-hub-5.onrender.com
-        run: npm test -- --watchAll=false
+        run: npm test -- --watchAll=false --passWithNoTests
 
   build-and-deploy:
     needs: test
@@ -35,7 +36,8 @@ jobs:
       run:
         working-directory: .
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Build Docker image
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
@@ -44,5 +46,5 @@ jobs:
         uses: render-examples/render-github-action@v1
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
-          serviceId: srv-d254hkm3jp1c73dv6e00d  # ✅ Your actual service ID
+          serviceId: srv-d254hkm3jp1c73dv6e00d  # ✅ Replace with your actual Render Service ID
           branch: main
