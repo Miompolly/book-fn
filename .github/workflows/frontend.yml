@@ -43,7 +43,7 @@ jobs:
         run: docker build --build-arg VITE_API_URL=https://book-hub-5.onrender.com -t react-frontend .
 
       - name: Deploy to Render
-        uses: render-examples/render-github-action@v1
+        uses: renderinc/render-action@v1
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
           serviceId: srv-d254hkm3jp1c73dv6e00d  # ✅ Replace with your actual Render Service ID
